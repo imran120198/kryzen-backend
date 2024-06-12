@@ -10,7 +10,7 @@ const UserRouter = Router();
 //signup
 UserRouter.post("/signup", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
     const result = await UserModel.findOne({ where: { email } });
 
     if (result) {
@@ -29,7 +29,7 @@ UserRouter.post("/signup", async (req, res) => {
 //login
 UserRouter.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
     const user = await UserModel.findOne({ where: { email } });
 
     if (!user) {
