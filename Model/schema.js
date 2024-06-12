@@ -1,6 +1,21 @@
 const { DataTypes } = require("sequelize");
 const seq = require("../Connection/connection");
-const { UserModel } = require("./User.schema");
+
+// Define User model
+const UserModel = seq.define("User", {
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+    validate: {
+      isEmail: true,
+    },
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
 
 const ProductModel = seq.define("Product", {
   name: {
@@ -37,7 +52,7 @@ ProductModel.belongsTo(UserModel, { foreignKey: "user_id" });
 
 (async () => {
   await seq.sync();
-  console.log("All models were synchronized successfully.");
+  console.log("Models were synchronized successfully.");
 })();
 
-module.exports = { ProductModel };
+module.exports = { UserModel, ProductModel };

@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const { UserRouter } = require("./Routes/User.routes");
 const { authentication } = require("./Middleware/authentication");
-const { ProductRouter } = require("./Routes/Product.routes");
+const productRouter = require("./Routes/Product.routes");
+
 
 require("dotenv").config();
 
@@ -18,7 +19,7 @@ app.get("/", (req, res) => {
 
 app.use("/user", UserRouter);
 app.use(authentication);
-app.use("/product", ProductRouter)
+app.use("/product", productRouter)
 
 app.listen(PORT, () => {
   console.log(`Running on PORT ${PORT}`);
