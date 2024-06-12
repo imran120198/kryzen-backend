@@ -1,36 +1,32 @@
-const express = require("express");
-const { ProductModel } = require("../Model/schema");
-const productRouter = express.Router();
+const { Router } = require("express");
+const { ProductModel } = require("../Model/Product.schema");
 
-// Get All Products
-productRouter.get("/", async (req, res) => {
+const ProductRouter = Router();
+
+//get product data
+ProductRouter.get("/", async (req, res) => {
   try {
-    const products = await ProductModel.findAll();
-    res.send(products);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal server error");
+    const product = await ProductModel.findAll();
+    res.status(200).send(product);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
-// Get All Products for only specific user
-productRouter.get("/my-prod", async (req, res) => {
+ProductRouter.get("/myproduct", async (req, res) => {
   try {
     const products = await ProductModel.findAll({
       where: { user_id: req.userID },
     });
-    res.send(products);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal server error");
+    res.status(200).send(products);
+  } catch (error) {
+    res.status(500).send(error);
   }
 });
 
-// Create a Product
-productRouter.post("/create", async (req, res) => {
+ProductRouter.post("/create", async (req, res) => {
   try {
     const { name, description, price, image, product_type } = req.body;
-    console.log("Body", req.body);
     const product = new ProductModel({
       name,
       description,
@@ -40,15 +36,14 @@ productRouter.post("/create", async (req, res) => {
       user_id: req.userID,
     });
     await product.save();
-    res.json({ message: "Product created successfully" });
+    res.send({ message: "Product created successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).send({ message: "Internal server error" });
   }
 });
 
-// Update a Product
-productRouter.put("/edit/:id", async (req, res) => {
+ProductRouter.put("/edit/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description, price, image, product_type } = req.body;
@@ -77,7 +72,7 @@ productRouter.put("/edit/:id", async (req, res) => {
 });
 
 // Delete Product by Id
-productRouter.delete("/delete/:id", async (req, res) => {
+ProductRouter.delete("/delete/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -97,4 +92,6 @@ productRouter.delete("/delete/:id", async (req, res) => {
   }
 });
 
-module.exports = productRouter;
+module.exports = {
+  ProductRouter,
+};
