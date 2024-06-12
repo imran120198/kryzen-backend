@@ -18,7 +18,7 @@ UserRouter.post("/signup", async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 4);
-    const user = await UserModel.create({ email, password: hashedPassword });
+    const user = await UserModel.create({ name, email, password: hashedPassword });
     res.status(200).send("Sign up successful");
   } catch (err) {
     console.log(err);
